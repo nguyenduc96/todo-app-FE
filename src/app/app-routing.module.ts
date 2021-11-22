@@ -4,6 +4,11 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'api/task',
+    pathMatch: 'full'
+  },
+  {
     path: 'api/todo',
     loadChildren: () => import('./models/todo/todo.module').then(m => m.TodoModule)
   },

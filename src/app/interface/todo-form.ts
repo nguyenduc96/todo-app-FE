@@ -1,5 +1,4 @@
 import {User} from './user';
-import {Category} from './category';
 import {Task} from './task';
 
 export interface TodoForm {
@@ -9,6 +8,6 @@ export interface TodoForm {
   isDone?: boolean;
   dateline?: Date;
   user?: User;
-  category?: Category;
+  category?: any;
   task?: Task;
 }

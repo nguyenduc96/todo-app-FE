@@ -1,1 +1,8 @@
-
+<div>
+  <form #formAddTask='ngForm' (ngSubmit)="addTask(formAddTask)">
+    <label for="content">Thêm danh sách : </label>
+    &nbsp;
+    <input type="text" id="content" name="content" ngModel placeholder="Nhập tên danh sách">
+    <button type="submit" class="btn btn-primary">Thêm</button>
+  </form>
+</div>

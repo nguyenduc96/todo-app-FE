@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Todo} from '../interface/todo';
 import {TODO_URL, URL_BASE} from '../interface/url-base';
+import {TodoForm} from '../interface/todo-form';
 
 @Injectable({
   providedIn: 'root'
@@ -19,12 +20,12 @@ export class TodoService {
     return this._http.get<Todo>(`${URL_BASE}/${TODO_URL}/${id}`);
   }
 
-  addTodo(todo: Todo): Observable<Todo> {
-    return this._http.post<Todo>(`${URL_BASE}/${TODO_URL}`, todo);
+  addTodo(todoForm: TodoForm): Observable<TodoForm> {
+    return this._http.post<TodoForm>(`${URL_BASE}/${TODO_URL}`, todoForm);
   }
 
-  updateTodo(todo: Todo): Observable<Todo> {
-    return this._http.put<Todo>(`${URL_BASE}/${TODO_URL}/${todo.id}`, todo);
+  updateTodo(todoForm: TodoForm, id: number): Observable<TodoForm> {
+    return this._http.put<TodoForm>(`${URL_BASE}/${TODO_URL}/${id}`, todoForm);
   }
 
   deleteTodo(id: number): Observable<Todo> {

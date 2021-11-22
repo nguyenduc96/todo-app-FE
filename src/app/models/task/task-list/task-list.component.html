@@ -1,1 +1,152 @@
-<p>task-list works!</p>
+<div cdkDropListGroup>
+  <ng-container *ngFor="let task of tasks">
+    <div class="example-container">
+      <h2>{{task.content}}</h2>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" (click)="confirmDelete(task.id)" data-bs-target="#delete">
+        Xóa danh sách
+      </button>
+
+      <div
+        cdkDropList
+        [cdkDropListData]="todos"
+        class="example-list"
+        (cdkDropListDropped)="drop($event, task.id)">
+        <ng-container *ngFor="let item of todos">
+          <div class="example-box" *ngIf="item.task?.id === task.id"
+               cdkDrag>
+            <table>
+              <tr>
+                <td>Tên nhiệm vu : {{item.content}}</td>
+              </tr>
+              <tr>
+                <td>Loại nhiệm vụ : {{item.category?.name}}</td>
+              </tr>
+              <tr>
+                <td><button type="button" class="btn btn-danger" data-bs-toggle="modal" (click)="confirmDeleteTodo(item.id)" data-bs-target="#delete-todo">
+                  Xóa
+                </button></td>
+                <td><button type="button" class="btn btn-info" data-bs-toggle="modal" (click)="modalUpdate(item.id, task.id)" data-bs-target="#update-todo">
+                  Sửa
+                </button></td>
+
+              </tr>
+
+            </table>
+
+          </div>
+
+        </ng-container>
+      </div>
+      <div><a class="btn btn-primary" data-bs-target="#create-todo" (click)="createTodo(task.id)" data-bs-toggle="modal" >Thêm nhiệm vụ</a></div>
+    </div>
+  </ng-container>
+</div>
+
+<!-- Modal create todo -->
+<div class="modal fade" id="create-todo" tabindex="-1" aria-labelledby="create-toto-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-toto-label">Thêm nhiệm vụ</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form-control" #formCreateTodo='ngForm' (ngSubmit)="addNewTodo(formCreateTodo)">
+          <div>
+            <label for="content">Tên nhiệm vụ : </label>
+            <input class="form-control" type="text" id="content" name="content" ngModel placeholder="Nhập vào tên nhiệm vụ">
+          </div>
+          <div>
+            Loại nhiệm vụ :
+            <select class="form-control" name="category" [(ngModel)]="todoForm.category">
+              <option [value]="undefined" disabled>Chọn loại nhiệm vụ</option>
+              <ng-container *ngFor="let c of categories">
+                <option class="form-control"  [value]="c.id">{{c.name}}</option>
+              </ng-container>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Thêm nhiệm vụ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal update todo -->
+<div class="modal fade" id="update-todo" tabindex="-1" aria-labelledby="update-toto-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="update-toto-label">Sửa nhiệm vụ</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form-control" #formUpdateTodo='ngForm' (ngSubmit)="updateTodo(formUpdateTodo)">
+          <div>
+            <label for="content-update">Tên nhiệm vụ : </label>
+            <input class="form-control" type="text" id="content-update" name="content" [ngModel]="todo.content" placeholder="Nhập vào tên nhiệm vụ">
+          </div>
+          <div>
+            Loại nhiệm vụ :
+            <select class="form-control" name="category" [ngModel]="todoForm.category">
+              <option [value]="undefined" disabled>Chọn loại nhiệm vụ</option>
+              <ng-container *ngFor="let c of categories">
+                <option class="form-control" [value]="c.id">{{c.name}}</option>
+              </ng-container>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Xác nhận sửa</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal delete -->
+<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Xóa danh sách</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn chắc chắn muốn xóa danh sách này chứ?
+        <br>
+        Nếu đồng ý thì tất cả các nhiệm vụ trong danh sách cũng sẽ bị xóa
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-danger" (click)="deleteTask(task.id)" data-bs-dismiss="modal">Xác nhận xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal delete todo-->
+<div class="modal fade" id="delete-todo" tabindex="-1" aria-labelledby="exampleModalLabelDeleteTodo" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabelDeleteTodo">Xóa nhiệm vụ</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn chắc chắn muốn xóa nhiệm vụ này chứ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-danger" (click)="deleteTodo(todo.id)" data-bs-dismiss="modal">Xác nhận xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
