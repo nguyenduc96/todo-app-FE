@@ -4,6 +4,7 @@ import {TaskListComponent} from './task-list/task-list.component';
 import {TaskCreateComponent} from './task-create/task-create.component';
 import {TaskEditComponent} from './task-edit/task-edit.component';
 import {TaskDeleteComponent} from './task-delete/task-delete.component';
+import {TodoCreateComponent} from '../todo/todo-create/todo-create.component';
 
 
 const routes: Routes = [

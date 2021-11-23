@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {TaskService} from '../../../service/task.service';
 import {Task} from '../../../interface/task';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
@@ -9,7 +9,6 @@ import {NgForm} from '@angular/forms';
 import {CategoryService} from '../../../service/category.service';
 import {Category} from '../../../interface/category';
 import {TodoForm} from '../../../interface/todo-form';
-import {logger} from 'codelyzer/util/logger';
 
 
 @Component({
@@ -17,9 +16,9 @@ import {logger} from 'codelyzer/util/logger';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
-export class TaskListComponent implements OnInit {
-  tasks: Task[] = [];
 
+
+export class TaskListComponent implements OnInit {
   todo: Todo = {};
 
   task: Task = {};
@@ -31,6 +30,9 @@ export class TaskListComponent implements OnInit {
   todoForm: TodoForm = {};
 
   taskList: any[] = [];
+
+  tasks: Task[] = [];
+
 
   constructor(private _taskService: TaskService,
               private _todoService: TodoService,
@@ -48,7 +50,7 @@ export class TaskListComponent implements OnInit {
   getTaskName() {
     this.tasks.forEach(task => {
       this.taskList.push(task.content);
-    })
+    });
   }
 
   getAllCategories() {
@@ -82,17 +84,6 @@ export class TaskListComponent implements OnInit {
     );
   }
 
-  drop(event: CdkDragDrop<Todo[], Task[]>, taskId: number) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(this.todos, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
-  }
 
   confirmDelete(id: number) {
     this.task = this.tasks.find(task => task.id === id);
@@ -128,6 +119,7 @@ export class TaskListComponent implements OnInit {
     this._todoService.deleteTodo(id).subscribe(() => {
       this.getAllTasks();
       this.getAllTodo();
+      this.isShowUpdate = !this.isShowUpdate;
     });
   }
 
@@ -135,9 +127,20 @@ export class TaskListComponent implements OnInit {
     this.todo = this.todos.find(todo => todo.id === id);
   }
 
-  modalUpdate(id: number, taskId: number) {
+  isShowUpdate: boolean = false;
+
+  showFormUpdate(id: number, id2: number) {
+    this.isShowUpdate = !this.isShowUpdate;
     this.todo = this.todos.find(todo => todo.id === id);
-    this.task = this.tasks.find(task => task.id === taskId);
+    this.todoForm = {
+      id: this.todo.id,
+      content: this.todo.content,
+      category: this.todo.category.id,
+      task: {
+        id: id2
+      }
+    };
+    this.task = this.tasks.find(task => task.id === id2);
   }
 
   updateTodo(formUpdateTodo: NgForm) {
@@ -146,10 +149,44 @@ export class TaskListComponent implements OnInit {
       id: this.todoForm.category,
       name: null
     };
+    if (this.todoForm.category.id === undefined) {
+      this.todoForm.category = {
+        id: this.todo.category.id,
+        name: null
+      };
+    }
     this.todoForm.task = this.task;
     this._todoService.updateTodo(this.todoForm, this.todo.id).subscribe(() => {
       this.getAllTasks();
       this.getAllTodo();
+      formUpdateTodo.reset();
+      this.isShowUpdate = !this.isShowUpdate;
     }, error => console.log(error));
+  }
+
+  closeTabs() {
+    document.getElementById('todo-create-form').innerHTML = '<a (click)="showFormCreateTodo(task.id)">Create</a>';
+  }
+
+  isShowForm: boolean = false;
+
+  showFormCreate(id: number) {
+    this.task = this.tasks.find(task => task.id === id);
+    this.isShowForm = !this.isShowForm;
+  }
+
+  changeShowForm() {
+    this.isShowUpdate = !this.isShowUpdate;
+  }
+
+  drop(event: CdkDragDrop<Todo[], any>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
   }
 }

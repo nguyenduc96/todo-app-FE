@@ -9,6 +9,7 @@ import { CategoryListComponent } from './models/category/category-list/category-
 import {HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,13 +18,14 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     FooterComponent,
     CategoryListComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    DragDropModule,
-    BrowserAnimationsModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        DragDropModule,
+        BrowserAnimationsModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

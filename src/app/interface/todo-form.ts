@@ -3,7 +3,7 @@ import {Task} from './task';
 
 export interface TodoForm {
   id?: number;
-  title?: string;
+  position?: number;
   content?: string;
   isDone?: boolean;
   dateline?: Date;

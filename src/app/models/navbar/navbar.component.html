@@ -1,6 +1,31 @@
 <nav class="nav nav-pills flex-column flex-sm-row">
+
   <a class="flex-sm-fill text-sm-center nav-link active" routerLink="api/task">Danh sách nhiệm vụ</a>
-  <a class="flex-sm-fill text-sm-center nav-link active" routerLink="/api/task/create">Thêm danh sách</a>
+  <a class="flex-sm-fill text-sm-center nav-link active" style="cursor: pointer" data-bs-target="#create-task" data-bs-toggle="modal">Thêm danh sách</a>
   <a class="flex-sm-fill text-sm-center nav-link active" href="#">Tài khoản</a>
-  <a class="flex-sm-fill text-sm-center nav-link active">Đăng xuất</a>
+  <a class="flex-sm-fill text-sm-center nav-link active" style="cursor: pointer">Đăng xuất</a>
 </nav>
+
+<!-- Modal create todo -->
+<div class="modal fade" id="create-task" tabindex="-1" aria-labelledby="create-toto-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="create-toto-label">Thêm danh sách</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="form-control" #formCreate='ngForm' (ngSubmit)="addNewTask(formCreate)">
+          <div>
+            <label for="content">Tên danh sách </label>
+            <input class="form-control" type="text" id="content" name="content" ngModel placeholder="Nhập vào tên danh sách">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Thêm danh sách</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
